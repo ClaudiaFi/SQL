@@ -1,0 +1,31 @@
+--Create a grocery store database
+
+CREATE TABLE store (id INTEGER PRIMARY KEY, name TEXT, size TEXT, gender TEXT, price INTEGER);
+
+INSERT into store VALUES (1, "shirt", "S", "Fem", 15);
+INSERT into store VALUES (2, "blouse", "M", "Fem", 25);
+INSERT into store VALUES (3, "pants", "L", "Masc", 45);
+INSERT into store VALUES (4, "short", "XL", "Masc", 34);
+INSERT into store VALUES (5, "skirt", "M", "Fem", 23);
+INSERT into store VALUES (6, "snicker", "S", "Masc", 43);
+INSERT into store VALUES (7, "sweater", "M", "Fem", 22);
+INSERT into store VALUES (8, "jacket", "L", "Masc", 34);
+INSERT into store VALUES (9, "coat", "M", "Fem", 55);
+INSERT into store VALUES (10, "jean", "L", "Masc", 25);
+INSERT into store VALUES (11, "socks", "M", "Masc", 12);
+INSERT into store VALUES (12, "vest", "S", "Fem", 11);
+INSERT into store VALUES (13, "pajamas", "M", "Masc", 29);
+INSERT into store VALUES (14, "leggins", "L", "Fem", 19);
+INSERT into store VALUES (15, "raincoat", "M", "Masc", 13);
+
+--what is the inventory price?
+SELECT SUM(price) FROM store;
+
+--display the database ordered by price 
+SELECT * FROM store order by PRICE desc;
+
+--display the number of items by size
+SELECT size, COUNT(size) FROM store GROUP BY size;
+
+--display the list of items that are in the femenine section and are size S
+SELECT * FROM store WHERE gender LIKE "fem" AND size LIKE "S";
