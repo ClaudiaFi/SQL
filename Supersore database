@@ -41,3 +41,19 @@ FROM superstore;
 SELECT avg(price)
 FROM superstore
 WHERE category="Kitchen Supplies"
+
+#Show a statistic about the average rating for all items in superstore 
+SELECT AVG (average_rating), item_name
+FROM superstore
+GROUP BY item_name;
+
+#Show the inventory per category, in order descendent order
+SELECT SUM (stock_quantity), category
+FROM superstore
+GROUP BY category
+ORDER BY SUM (stock_quantity) desc;
+
+#Show the quantity of items per category
+SELECT COUNT (item_name), category
+FROM superstore
+GROUP BY category;
