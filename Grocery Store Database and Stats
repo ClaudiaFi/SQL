@@ -1,4 +1,4 @@
---Create a grocery store database
+--This is a grocery store database created by me
 
 CREATE TABLE store (id INTEGER PRIMARY KEY, name TEXT, size TEXT, gender TEXT, price INTEGER);
 
