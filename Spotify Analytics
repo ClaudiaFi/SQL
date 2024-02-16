@@ -1,0 +1,65 @@
+-- For this project, I downloaded Spotify data from Kaggle.
+-- Then I created a table to insert Spotify data into.
+-- Finally, I performed analytics on the data using SQL. 
+
+-- Step 1: Creating the table: 
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness text NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL 
+)
+
+-- Step 2: Then I inserted the Spotify Data .csv into the table.
+
+-- Step 3: Next, I explored the data using the following SQL. 
+
+-- 1. Top 10 artists with the highest danceability style in average among their songs
+SELECT ROUND(AVG(danceability),2) as danceability_style, artist_name
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY danceability_style desc
+LIMIT 10
+
+--2. Top 15 artists based on their average popularity
+SELECT artist_name, ROUND(AVG(popularity),2) as avg_popularity
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY avg_popularity desc
+LIMIT 15;
+
+--3. Artist that released the longest song, which was it, and how long was it
+SELECT track_name, artist_name, duration_ms
+FROM BIT_DB.Spotifydata
+WHERE duration_ms = (SELECT MAX(duration_ms) FROM BIT_DB.Spotifydata);
+
+--4. The average danceability for the 10 most popular songs
+SELECT AVG(danceability)
+FROM BIT_DB.Spotifydata
+WHERE danceability IN (SELECT danceability FROM BIT_DB.Spotifydata ORDER BY danceability DESC LIMIT 10);
+
+--5. The least 10 energy songs, and  their energy level and popularity
+SELECT track_name, energy, popularity 
+FROM BIT_DB.Spotifydata
+ORDER BY energy ASC
+LIMIT 10;
+
+-- 6. Identify Songs with High Danceability and Low Valence
+-- (Songs with danceability > 0.8 and valence < 0.5)
+SELECT track_name, artist_name, danceability, valence
+FROM BIT_DB.Spotifydata
+WHERE danceability > 0.8 AND valence < 0.5
