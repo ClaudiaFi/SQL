@@ -28,32 +28,54 @@ VALUES
     (15, 'Cozy Throw Blanket', 'Furnishings', 24.99, 100, 4.2);
 
 
-#Use a SELECT statement to order the items by price.
+#Query 1: Order Items by Price. This query retrieves a list of items ordered by price in descending order, which can be used for analyzing product pricing strategies or identifying premium items.
 SELECT item_name, price
 FROM superstore
 ORDER BY price desc;
 
-#Show a statistic about the item prices.
+#Query 2: Average Price of All Items. This query calculates the average price of all items in the store. It's useful for determining product positioning and comparing with market benchmarks.
 SELECT avg(price)
 FROM superstore;
 
-#Show a statistic about the price for items in the category of "Kitchen Supplies". 
+#Query 3: Average Price of Kitchen Supplies.  This query focuses on the "Kitchen Supplies" category to calculate the average price. Such a query is crucial for evaluating specific category performance or planning targeted promotions. 
 SELECT avg(price)
 FROM superstore
 WHERE category="Kitchen Supplies"
 
-#Show a statistic about the average rating for all items in superstore 
+#Query 4: Average Rating for All Items. This query calculates the average customer rating for each item. It provides insights into customer satisfaction, which is key for improving product offerings and marketing strategies.
 SELECT AVG (average_rating), item_name
 FROM superstore
 GROUP BY item_name;
 
-#Show the inventory per category, in order descendent order
+#Query 5: Total Inventory per Category. This query aggregates the total stock available per category in descending order. It is useful for inventory management, helping to identify categories with the most or least stock.
 SELECT SUM (stock_quantity), category
 FROM superstore
 GROUP BY category
 ORDER BY SUM (stock_quantity) desc;
 
-#Show the quantity of items per category
+#Query 6: Number of Items per Category. This query counts the number of unique items available in each category. This helps in product diversity analysis and inventory planning.
 SELECT COUNT (item_name), category
 FROM superstore
 GROUP BY category;
+
+#Query 7: Top 5 Best-Selling Items, based on stock availability. his query identifies the top 5 best-selling items based on stock availability, which can help in product restocking decisions and sales performance analysis. 
+SELECT item_name, stock_quantity
+FROM superstore
+ORDER BY stock_quantity DESC
+LIMIT 5;
+
+#Query 8: Items Priced Above the Average Price. This query finds items priced above the average, helping to identify premium products or items with higher price points relative to the store's average.
+SELECT item_name, price
+FROM superstore
+WHERE price > (SELECT AVG(price) FROM superstore);
+
+#Query 9: Items with the Highest Customer Rating. This query retrieves items with the highest customer ratings, useful for highlighting popular products for marketing campaigns.
+SELECT item_name, average_rating
+FROM superstore
+WHERE average_rating = (SELECT MAX(average_rating) FROM superstore);
+
+#Query 10: Inventory Value by Category. This query calculates the total inventory value per category by multiplying price by stock quantity, which is crucial for financial planning and inventory management.
+SELECT category, SUM(price * stock_quantity) AS total_inventory_value
+FROM superstore
+GROUP BY category
+ORDER BY total_inventory_value DESC;
