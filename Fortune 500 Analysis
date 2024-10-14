@@ -58,59 +58,48 @@ VALUES
     ('Company JJ', 'Manufacturing', 370.0, 3100, 1, 20, 12, 7.6),
     ('Company KK', 'Healthcare', 150.2, 3400, 0, 16, 8, 5.3);
 
-# Analysis: 
-
-# First Exercise: Ranking Industries: 
-# Analyzed the dataset to rank industries based on the number of companies and total revenue, presenting results in descending order of company count and revenue.
-
-SELECT industry, COUNT (*) as "number_of_companies", ROUND(SUM(revenue),1) as "total_revenue"
+#Query 1: Ranking Industries by Companies and Revenue. This query ranks industries based on the number of companies and their total revenue, providing a clear view of which industries dominate in terms of both company presence and financial strength.
+SELECT industry, COUNT(*) AS number_of_companies, ROUND(SUM(revenue),1) AS total_revenue
 FROM fortune_companies
 GROUP BY industry
-ORDER BY number_of_companies desc, total_revenue desc;
+ORDER BY number_of_companies DESC, total_revenue DESC;
 
-# Second Exercise: Top Companies with Healthcare Benefits:
-# Identified the top 5 companies with healthcare benefits, considering the highest paid time off days and longest maternity leave
-
+#Query 2: Top 5 Companies with Best Healthcare Benefits. This query identifies the top 5 companies offering healthcare benefits with the most paid time off and longest maternity leave. It can be used to assess employee-friendly policies among leading companies.
 SELECT company_name, paid_time_off_days, maternity_leave_weeks
 FROM fortune_companies
 WHERE healthcare_benefits = 1
 AND paid_time_off_days > (SELECT AVG(paid_time_off_days) FROM fortune_companies)
 AND maternity_leave_weeks > (SELECT AVG(maternity_leave_weeks) FROM fortune_companies)
-ORDER BY paid_time_off_days desc
+ORDER BY paid_time_off_days DESC
 LIMIT 5;
 
-# Third Exercise: Average Employee Tenure:
-# Explored industries with an average employee tenure of 6 years or longer, rounded to the nearest whole number.
-
-SELECT industry, ROUND(AVG(avg_employee_tenure)) as tenure_industry
+#Query 3: Industries with Long Employee Tenure. This query explores industries with an average employee tenure of 6 years or longer, rounding to the nearest whole number. It helps in identifying industries where employees tend to stay longer.
+SELECT industry, ROUND(AVG(avg_employee_tenure)) AS tenure_industry
 FROM fortune_companies
 GROUP BY industry
 HAVING tenure_industry >= 6
-ORDER BY tenure_industry desc;
+ORDER BY tenure_industry DESC;
 
-# Fourth Exercise: Company Size Classification:
-# Classified companies based on employee quantity into categories such as "large," "medium," or "small."
-
-SELECT
+#Query 4: Company Size Classification. This query classifies companies based on their employee numbers into categories such as "large," "medium," or "small." It is useful for understanding the scale of different companies.
+SELECT company_name, employees,
   CASE
-    WHEN employees >= 100000 THEN "large company"
-    WHEN employees >= 10000 THEN "medium company"
-    ELSE "small company"
-  END AS "Company_size",
-  COUNT(*) AS "Number_of_companies"
-FROM
-  fortune_companies
-GROUP BY
-  Company_size;
+    WHEN employees >= 100000 THEN 'large company'
+    WHEN employees >= 10000 THEN 'medium company'
+    ELSE 'small company'
+  END AS Company_size
+FROM fortune_companies;
 
-# Fifth Exercise: Mother-Friendly Workplace Classification:
-Categorized companies in the Healthcare industry as "mother-friendly workplace," "acceptable," or "abysmal" based on maternity leave duration.
-
+#Query 5: Mother-Friendly Workplace Classification. This query categorizes companies in the Healthcare industry as "mother-friendly," "acceptable," or "abysmal" based on maternity leave duration. It provides insight into how well companies in this sector support working mothers.
 SELECT company_name,
 CASE 
-  WHEN maternity_leave_weeks >= 10 THEN 'mother friendly workplace'
+  WHEN maternity_leave_weeks >= 10 THEN 'mother-friendly workplace'
   WHEN maternity_leave_weeks >= 8 THEN 'acceptable'
   ELSE 'abysmal'
-END as mother_friendliness
+END AS mother_friendliness
 FROM fortune_companies
-WHERE industry='Healthcare'
+WHERE industry = 'Healthcare';
+
+#Query 6: Revenue per Employee Ratio. This query calculates the revenue generated per employee for each company, which is an essential metric for understanding the productivity and efficiency of companies across different industries.
+SELECT company_name, ROUND(revenue/employees, 2) AS revenue_per_employee
+FROM fortune_companies
+ORDER BY revenue_per_employee DESC;
