@@ -3,44 +3,44 @@
 -- The following set of queries delves into key aspects such as order quantities, product-specific details, and revenue calculations for specified time frames and locations.
  
 
--- 1. Counting the number of orders placed in January
+#Query 1: Counting the number of orders placed in January
 SELECT COUNT(orderID) 
 FROM BIT_DB.JanSales
 WHERE LENGTH(orderID) = 6
   AND orderID <> 'Order ID';
 
--- 2. Counting the number of orders for iPhones placed in January
+#Query 2: Counting the number of orders for iPhones placed in January
 SELECT COUNT(orderid)
 FROM BIT_DB.JanSales
 WHERE Product = 'iPhone'
   AND LENGTH(orderid) = 6
   AND orderid <> 'Order ID';
 
--- 3. Retrieving customer account numbers for all orders placed in February
+#Query 3: Retrieving customer account numbers for all orders placed in February
 SELECT cust.account_number
 FROM BIT_DB.customers cust
 INNER JOIN BIT_DB.FebSales feb ON cust.order_ID = feb.orderID
 WHERE LENGTH(feb.orderid) = 6
   AND feb.orderid <> 'Order ID';
 
--- 4. Identifying the cheapest product sold in January and its price
+#Query 4: Identifying the cheapest product sold in January and its price
 SELECT DISTINCT product, price
 FROM BIT_DB.JanSales
 WHERE price = (SELECT MIN(price) FROM BIT_DB.JanSales)
 GROUP BY product;
 
--- 5. Calculating total revenue for each product sold in January
+#Query 5: Calculating total revenue for each product sold in January
 SELECT product, ROUND(SUM(quantity * price), 1) as Revenue
 FROM BIT_DB.JanSales
 GROUP BY product;
 
--- 6. Determining products sold in February at a specific location, along with quantity and total revenue
+#Query 6: Determining products sold in February at a specific location, along with quantity and total revenue
 SELECT SUM(quantity) as total_quantity, product, SUM(quantity * price) as total_revenue
 FROM BIT_DB.FebSales
 WHERE location = '548 Lincoln St, Seattle, WA 98101'
 GROUP BY product;
 
--- 7. Identifying customers who ordered more than 2 products and calculate their average spending
+#Query 7: Identifying customers who ordered more than 2 products and calculate their average spending
 SELECT COUNT(DISTINCT acctnum) as customer_count, AVG(quantity * price) as average_spending
 FROM BIT_DB.FebSales feb
 LEFT JOIN BIT_DB.customers cust ON feb.orderID = cust.order_id
@@ -48,13 +48,13 @@ WHERE feb.quantity > 2
   AND LENGTH(orderid) = 6
   AND orderid <> 'Order ID';
 
--- 8. Extracting a list of distinct products sold in Los Angeles in February providing the total quantity of each product sold in that location during the specified period
+#Query 8: Extracting a list of distinct products sold in Los Angeles in February providing the total quantity of each product sold in that location during the specified period
 SELECT distinct Product, sum(quantity)
 FROM BIT_DB.FebSales
 WHERE location LIKE '%Los Angeles%'
 GROUP BY Product
 
---9. Discovering locations in New York that received a minimum of 3 orders in January, along with the corresponding order counts
+#Query 9: Discovering locations in New York that received a minimum of 3 orders in January, along with the corresponding order counts
 SELECT distinct location, count(orderID) as total_orders
 FROM BIT_DB.JanSales
 WHERE location LIKE '%New York%'
@@ -63,13 +63,13 @@ AND orderid <> 'Order ID'
 GROUP BY location
 HAVING total_orders > 2;
 
---10. Calculating the total quantity sold for each type of headphones in the month of February
+#Query 10: Calculating the total quantity sold for each type of headphones in the month of February
 SELECT sum(Quantity) as quantity, Product
 FROM BIT_DB.FebSales 
 WHERE Product like '%Headphones%'
 GROUP BY Product;
 
---11. Finding the average amount spent per account in February by dividing the total amount spent by the number of accounts
+#Query 11: Finding the average amount spent per account in February by dividing the total amount spent by the number of accounts
 SELECT SUM(quantity*price)/count(cust.acctnum)
 FROM BIT_DB.FebSales Feb
 LEFT JOIN BIT_DB.customers cust
@@ -77,7 +77,7 @@ ON FEB.orderid=cust.order_id
 WHERE length(orderid) = 6 
 AND orderid <> 'Order ID';
 
---12. Determining the overall average quantity of products purchased per account in February
+#Query 12: Determining the overall average quantity of products purchased per account in February
 SELECT sum(quantity)/count(cust.acctnum)
 FROM BIT_DB.FebSales Feb
 LEFT JOIN BIT_DB.customers cust
@@ -85,7 +85,7 @@ ON FEB.orderid=cust.order_id
 WHERE length(orderid) = 6 
 AND orderid <> 'Order ID';
 
-13. Identifying the product that generated the most revenue in January and displaying its total revenue
+#Query 13: Identifying the product that generated the most revenue in January and displaying its total revenue
 SELECT distinct Product, sum(quantity*price) as Revenue
 FROM BIT_DB.JanSales
 GROUP BY product
